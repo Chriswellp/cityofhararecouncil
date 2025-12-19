@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZRPT Registration Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        :root {
+            --brand-blue: #1a365d;
+            --brand-gold: #c5a059;
+            --bg-body: #f4f7f9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --nav-bg: #ffffff;
+            --input-bg: #ffffff;
+            --footer-text: #1e293b;
+            --print-btn-border: #212529;
+            --print-btn-text: #212529;
+            --modal-bg: #ffffff;
+            --social-icon: #1a365d;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #cbd5e1;
+            --border-color: #334155;
+            --nav-bg: #1e293b;
+            --input-bg: #334155;
+            --footer-text: #f1f5f9;
+            --print-btn-border: #f1f5f9;
+            --print-btn-text: #f1f5f9;
+            --modal-bg: #1e293b;
+            --social-icon: #c5a059;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            color: var(--text-main);
+            background-color: var(--bg-body);
+            transition: all 0.3s ease;
+        }
+
+        .navbar {
+            background-color: var(--nav-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.8rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-link { color: var(--text-main) !important; font-weight: 600; }
+        .theme-toggle {
+            cursor: pointer;
+            padding: 6px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-main);
+            font-size: 0.85rem;
+        }
+
+        .form-wrapper { 
+            background: var(--bg-card); 
+            border-radius: 8px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+            padding: 40px 60px; 
+            margin: 30px auto; 
+            max-width: 1000px; 
+            border: 1px solid var(--border-color);
+        }
+
+        .account-grid { display: flex; border: 1.5px solid var(--brand-blue); background: #fff; height: 35px; }
+        [data-theme="dark"] .account-grid { border-color: var(--brand-gold); }
+        .grid-cell { width: 32px; border-right: 1px solid var(--brand-blue); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; }
+        [data-theme="dark"] .grid-cell { border-right-color: var(--brand-gold); color: #000; }
+        .bg-dark-cell { background-color: var(--brand-blue) !important; color: white !important; }
+
+        .section-header { 
+            background-color: rgba(197, 160, 89, 0.1);
+            padding: 10px 15px;
+            margin: 25px 0 15px;
+            border-left: 5px solid var(--brand-gold);
+        }
+        .section-header h3 { font-size: 0.85rem; font-weight: 800; color: var(--brand-blue); margin: 0; text-transform: uppercase; }
+        [data-theme="dark"] .section-header h3 { color: var(--brand-gold); }
+        
+        .form-label { font-weight: 700; color: var(--text-muted); font-size: 0.65rem; margin-bottom: 2px; text-transform: uppercase; }
+        .form-control { 
+            border-radius: 4px; 
+            border: 1px solid var(--border-color); 
+            background: var(--input-bg); 
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+
+        .signature-box {
+            border: 2px dashed var(--border-color);
+            background: #ffffff;
+            height: 150px;
+            border-radius: 4px;
+        }
+        canvas { width: 100%; height: 100%; cursor: crosshair; }
+
+        .btn-link-clear { color: var(--text-main) !important; font-weight: 600; text-decoration: underline; font-size: 0.7rem; }
+        
+        .footer-contact-info { color: var(--footer-text); }
+        .social-icons a { 
+            color: var(--social-icon); 
+            font-size: 1.2rem; 
+            margin: 0 10px; 
+            transition: transform 0.2s ease;
+            display: inline-block;
+        }
+        .social-icons a:hover { transform: scale(1.2); color: var(--brand-gold); }
+
+        .modal-content { background-color: var(--modal-bg); color: var(--text-main); border: 1px solid var(--border-color); }
+        .tracking-badge { background: var(--brand-blue); color: white; padding: 5px 12px; border-radius: 4px; font-family: monospace; font-size: 1.1rem; }
+        [data-theme="dark"] .tracking-badge { background: var(--brand-gold); color: #000; }
+
+        @media print { 
+            .no-print, nav, .modal { display: none !important; } 
+            .form-wrapper { box-shadow: none; margin: 0; width: 100%; border: none; padding: 0; }
+            body { background: white; color: black; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <nav class="navbar no-print">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-4">
+                <a href="#" class="nav-link text-decoration-none"><i class="fas fa-home me-1"></i> HOME</a>
+            </div>
+            <button class="theme-toggle" id="themeSwitcher">
+                <i class="fas fa-moon me-2"></i><span>DARK MODE</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-wrapper">
+            
+            <div class="row mb-4 align-items-start">
+                <div class="col-md-7">
+                    <h1 class="fw-800 mb-0" style="color: var(--brand-blue); font-size: 1.8rem;">ZIMBABWE ROYAL PROJECTS TRUST</h1>
+                    <p class="fw-bold mb-4" style="color: var(--text-muted);">REGISTRATION FORM (CITY OF HARARE)</p>
+                    
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="small fw-bold me-3">ACCOUNT No:</span>
+                        <div class="account-grid">
+                            <div class="grid-cell">Z</div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell bg-dark-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="p-3 bg-light text-dark rounded border">
+                        <label class="form-label d-block">Council Waiting List No.</label>
+                        <input type="text" id="council_list_no" class="form-control mb-2">
+                        <div class="row g-2">
+                            <div class="col-7"><label class="form-label">Receipt No.</label><input type="text" id="receipt_no" class="form-control"></div>
+                            <div class="col-5 d-flex align-items-end"><span class="text-danger fw-bold" style="font-size: 0.6rem;">ADMISSION 10% ONLY</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="registrationForm">
+                <div class="section-header"><h3>SECTION 1: APPLICANT</h3></div>
+                <div class="row g-3">
+                    <div class="col-md-6"><label class="form-label">Name</label><input type="text" id="app_name" class="form-control"></div>
+                    <div class="col-md-6"><label class="form-label">Surname</label><input type="text" id="app_surname" class="form-control"></div>
+                    <div class="col-md-8"><label class="form-label">ID Number</label><input type="text" id="app_id" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Date of Birth</label><input type="date" id="app_dob" class="form-control"></div>
+                    <div class="col-12"><label class="form-label">Residential Address</label><input type="text" id="app_address" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Contact Number</label><input type="text" id="app_contact" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Employer</label><input type="text" id="app_employer" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">City of Harare</label><input type="text" id="app_city_harare" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Contact</label><input type="text" id="app_contact_alt" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Department</label><input type="text" id="app_dept" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Employment No.</label><input type="text" id="app_emp_no" class="form-control"></div>
+                </div>
+
+                <div class="section-header"><h3>SECTION 2: NEXT OF KIN</h3></div>
+                <div class="row g-3">
+                    <div class="col-md-6"><label class="form-label">Name</label><input type="text" id="kin_name" class="form-control"></div>
+                    <div class="col-md-6"><label class="form-label">Surname</label><input type="text" id="kin_surname" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Nee</label><input type="text" id="kin_nee" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">ID Number</label><input type="text" id="kin_id" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">D.O.B</label><input type="date" id="kin_dob" class="form-control"></div>
+                    <div class="col-md-6"><label class="form-label">Relationship</label><input type="text" id="kin_rel" class="form-control"></div>
+                    <div class="col-md-6"><label class="form-label">Profession</label><input type="text" id="kin_prof" class="form-control"></div>
+                    <div class="col-md-8"><label class="form-label">Address</label><input type="text" id="kin_address" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Cell</label><input type="text" id="kin_cell" class="form-control"></div>
+                </div>
+
+                <div class="section-header"><h3>SECTION 3: SPOUSE DETAILS</h3></div>
+                <div class="row g-3">
+                    <div class="col-md-6"><label class="form-label">Name</label><input type="text" id="spouse_name" class="form-control"></div>
+                    <div class="col-md-6"><label class="form-label">Surname</label><input type="text" id="spouse_surname" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Nee</label><input type="text" id="spouse_nee" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">ID Number</label><input type="text" id="spouse_id" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">D.O.B</label><input type="date" id="spouse_dob" class="form-control"></div>
+                </div>
+
+                <div class="section-header"><h3>SECTION 4: BENEFICIARIES</h3></div>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="beneficiaryTable">
+                        <thead class="table-light">
+                            <tr class="small fw-bold"><th>NAME</th><th>D.O.B</th><th>ID NUMBER</th><th class="no-print"></th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" class="form-control border-0 b-name"></td>
+                                <td><input type="date" class="form-control border-0 b-dob"></td>
+                                <td><input type="text" class="form-control border-0 b-id"></td>
+                                <td class="no-print text-center"><button type="button" class="btn btn-sm text-danger remove-row"><i class="fas fa-trash"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-secondary no-print" id="addRow"><i class="fas fa-plus me-1"></i>ADD ROW</button>
+
+                <div class="mt-5 p-4 bg-light text-dark border-start border-4 border-primary rounded">
+                    <p class="small mb-0" style="line-height: 1.8;">
+                        I <input type="text" id="mou_signer_name" class="border-0 border-bottom bg-transparent fw-bold text-center" style="width: 240px;" placeholder="[Full Name]"> 
+                        the undersigned do hereby state that I shall abide by the terms and conditions of this contract on M.O.U. 
+                        The monthly installment of <strong>$100.00 USD (One hundred dollars only usd)</strong> per month shall go towards my scheme, 
+                        and shall update my account every month to <strong>ZIMBABWE ROYAL PROJECTS TRUST</strong> direct from my salary through human capital. 
+                        <strong>ADMINISTRATION COST OF 10% IS NON REFUNDABLE</strong> which covers agreement of sale, LEGAL, MOU and all direct cost.
+                    </p>
+                </div>
+
+                <div class="row mt-5 g-4">
+                    <div class="col-md-6">
+                        <label class="form-label">APPLICANT DIGITAL SIGNATURE</label>
+                        <div class="signature-box"><canvas id="pad-app"></canvas></div>
+                        <div class="text-end no-print">
+                            <button type="button" class="btn btn-link btn-link-clear" id="clearApp">CLEAR APPLICANT</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">FOR ZRPT CONSULTANTS (DIGITAL SIGNATURE)</label>
+                        <div class="signature-box"><canvas id="pad-cons"></canvas></div>
+                        <div class="text-end no-print">
+                            <button type="button" class="btn btn-link btn-link-clear" id="clearCons">CLEAR CONSULTANT</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4"><label class="form-label">Applicant Name</label><input type="text" id="footer_app_name" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Consultant Name</label><input type="text" id="footer_cons_name" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Date of Signing</label><input type="date" id="footer_sign_date" class="form-control"></div>
+                </div>
+
+                <div class="mt-5 pt-4 border-top">
+                    <div class="row footer-contact-info align-items-center">
+                        <div class="col-md-4">
+                            <p class="small mb-1"><i class="fas fa-map-marker-alt me-2"></i>909 Retreat, Waterfalls, Harare</p>
+                            <p class="small mb-0"><i class="fas fa-envelope me-2"></i>info@chris.org.zw</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="social-icons mb-2 no-print">
+                                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                                <a href="#"><i class="fab fa-facebook"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                            <p class="small fw-bold mb-0">+263 77 720 6111 / +263 77 609 2761</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <p class="fw-bold mb-0">ZIMBABWE ROYAL PROJECTS TRUST</p>
+                            <p class="small mb-0">Reg No: 0001/2025</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-5 no-print">
+                    <button type="button" class="btn btn-primary px-5 py-2 fw-bold shadow" id="submitBtn">SUBMIT APPLICATION</button>
+                    <button type="button" onclick="window.print()" class="btn btn-outline-dark ms-2">SAVE PDF</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title fw-bold">Application Tracking</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body text-center">
+                    <p class="mb-2">Your Unique Tracking Code:</p>
+                    <div class="tracking-badge mb-4" id="modal_tracking_code">ZRPT-XXXX-XXXX</div>
+                    <hr>
+                    <div class="text-start">
+                        <p>Applicant: <strong id="modal_name"></strong></p>
+                        <p>ID: <strong id="modal_id"></strong></p>
+                    </div>
+                </div>
+                <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Go Back</button><button type="button" class="btn btn-primary" id="finalConfirmBtn">Confirm & Submit</button></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script>
+        const body = document.body;
+        const themeBtn = document.getElementById('themeSwitcher');
+        
+        const canvasApp = document.getElementById('pad-app');
+        const canvasCons = document.getElementById('pad-cons');
+        const padApp = new SignaturePad(canvasApp, { backgroundColor: 'rgba(0,0,0,0)' });
+        const padCons = new SignaturePad(canvasCons, { backgroundColor: 'rgba(0,0,0,0)' });
+
+        function updatePenColors() {
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            padApp.penColor = isDark ? '#ffffff' : '#1a365d';
+            padCons.penColor = isDark ? '#ffffff' : '#c5a059';
+        }
+
+        themeBtn.addEventListener('click', () => {
+            const target = body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', target);
+            themeBtn.innerHTML = target === 'dark' ? '<i class="fas fa-sun me-2"></i><span>LIGHT MODE</span>' : '<i class="fas fa-moon me-2"></i><span>DARK MODE</span>';
+            updatePenColors();
+        });
+
+        function resize() {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            [canvasApp, canvasCons].forEach(c => {
+                c.width = c.offsetWidth * ratio;
+                c.height = c.offsetHeight * ratio;
+                c.getContext("2d").scale(ratio, ratio);
+            });
+            padApp.clear(); padCons.clear();
+            updatePenColors();
+        }
+        window.onresize = resize; resize();
+
+        document.getElementById('clearApp').addEventListener('click', () => padApp.clear());
+        document.getElementById('clearCons').addEventListener('click', () => padCons.clear());
+
+        document.getElementById('addRow').addEventListener('click', () => {
+            const row = `<tr><td><input type="text" class="form-control border-0 b-name"></td><td><input type="date" class="form-control border-0 b-dob"></td><td><input type="text" class="form-control border-0 b-id"></td><td class="no-print text-center"><button type="button" class="btn btn-sm text-danger remove-row"><i class="fas fa-trash"></i></button></td></tr>`;
+            document.querySelector('#beneficiaryTable tbody').insertAdjacentHTML('beforeend', row);
+        });
+
+        document.getElementById('beneficiaryTable').addEventListener('click', (e) => {
+            if(e.target.closest('.remove-row')) e.target.closest('tr').remove();
+        });
+
+        function generateTrackingCode() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+            return `ZRPT-${year}-${random}`;
+        }
+
+        const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        
+        // When user clicks Submit Application, show the modal
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            const fullName = (document.getElementById('app_name').value + ' ' + document.getElementById('app_surname').value).trim();
+            document.getElementById('modal_name').innerText = fullName || "[Not Provided]";
+            document.getElementById('modal_id').innerText = document.getElementById('app_id').value || "[Not Provided]";
+            document.getElementById('modal_tracking_code').innerText = generateTrackingCode();
+            modal.show();
+        });
+
+        // When user confirms inside the modal, send data to PHP
+        document.getElementById('finalConfirmBtn').addEventListener('click', () => { 
+            const tracking = document.getElementById('modal_tracking_code').innerText;
+            
+            const payload = {
+                tracking_code: tracking,
+                council_list_no: document.getElementById('council_list_no').value,
+                receipt_no: document.getElementById('receipt_no').value,
+                app_name: document.getElementById('app_name').value,
+                app_surname: document.getElementById('app_surname').value,
+                app_id: document.getElementById('app_id').value,
+                app_dob: document.getElementById('app_dob').value,
+                app_address: document.getElementById('app_address').value,
+                app_contact: document.getElementById('app_contact').value,
+                app_employer: document.getElementById('app_employer').value,
+                app_city_harare: document.getElementById('app_city_harare').value,
+                app_dept: document.getElementById('app_dept').value,
+                app_emp_no: document.getElementById('app_emp_no').value,
+                kin_name: document.getElementById('kin_name').value,
+                kin_surname: document.getElementById('kin_surname').value,
+                kin_nee: document.getElementById('kin_nee').value,
+                kin_id: document.getElementById('kin_id').value,
+                kin_dob: document.getElementById('kin_dob').value,
+                kin_rel: document.getElementById('kin_rel').value,
+                kin_prof: document.getElementById('kin_prof').value,
+                kin_address: document.getElementById('kin_address').value,
+                kin_cell: document.getElementById('kin_cell').value,
+                spouse_name: document.getElementById('spouse_name').value,
+                spouse_surname: document.getElementById('spouse_surname').value,
+                spouse_nee: document.getElementById('spouse_nee').value,
+                spouse_id: document.getElementById('spouse_id').value,
+                spouse_dob: document.getElementById('spouse_dob').value,
+                mou_signer_name: document.getElementById('mou_signer_name').value,
+                sig_app: padApp.isEmpty() ? null : padApp.toDataURL(),
+                sig_cons: padCons.isEmpty() ? null : padCons.toDataURL()
+            };
+
+            fetch('submit.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(response => {
+                if(response.status === "success") {
+                    alert("Application Successfully Saved to Database!");
+                    modal.hide();
+                    window.print();
+                } else {
+                    alert("Error saving data: " + response.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
